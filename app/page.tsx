@@ -30,12 +30,12 @@ export default function ValentinesExperience() {
 
   useEffect(() => {
     const updateGameSize = () => {
-      const width = Math.min(400, window.innerWidth - 40)
-      const height = Math.min(600, window.innerHeight - 200)
+      const containerWidth = Math.min(400, window.innerWidth - 40)
+      const containerHeight = Math.min(600, window.innerHeight - 200)
       setGameConfig({
-        canvasWidth: width,
-        canvasHeight: height,
-        cupidSize: Math.max(40, Math.floor(width * 0.125)),
+        canvasWidth: containerWidth,
+        canvasHeight: containerHeight,
+        cupidSize: Math.max(40, Math.floor(containerWidth * 0.125)),
       })
     }
 
@@ -57,8 +57,6 @@ export default function ValentinesExperience() {
       className={styles.main}
       style={{
         backgroundImage: `url(${discussionQuestions[currentQuestion].backgroundImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
       }}
     >
       {!discussionCompleted ? (
@@ -73,7 +71,7 @@ export default function ValentinesExperience() {
         </div>
       ) : (
         <div className={styles.gameContainer}>
-          <h2 className={styles.gameTitle}>Let&#39;s Play a Game!</h2>
+          <h2 className={styles.gameTitle}>Let's Play a Game!</h2>
           <p className={styles.gameInstructions}>Help Cupid avoid the hearts.</p>
           <CupidGame config={gameConfig} />
         </div>

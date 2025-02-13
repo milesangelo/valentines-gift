@@ -60,6 +60,7 @@
   border-radius: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
+  overflow: hidden;
 }
 
 .gameTitle {
@@ -75,6 +76,12 @@
 }
 
 @media (max-width: 600px) {
+  .main {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: #f0f0f0;
+  }
+
   .card {
     padding: 1.5rem;
   }
@@ -90,6 +97,10 @@
   .nextButton {
     padding: 0.6rem 1.2rem;
     font-size: 0.9rem;
+  }
+
+  .gameContainer {
+    padding: 1rem;
   }
 
   .gameTitle {
