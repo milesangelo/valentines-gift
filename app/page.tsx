@@ -71,7 +71,7 @@ export default function ValentinesExperience() {
         </div>
       ) : (
         <div className={styles.gameContainer}>
-          <h2 className={styles.gameTitle}>Let's Play a Game!</h2>
+          <h2 className={styles.gameTitle}>Let&#39;s Play a Game!</h2>
           <p className={styles.gameInstructions}>Help Cupid avoid the hearts.</p>
           <CupidGame config={gameConfig} />
         </div>
