@@ -1,79 +1,83 @@
 "use client"
 
-import { useState } from "react"
-import Question from "./components/Question"
-import HeartAnimation from "./components/HeartAnimation"
+import { useState, useEffect } from "react"
 import CupidGame from "./components/CupidGame"
 import styles from "./page.module.css"
 
-const questions = [
+const discussionQuestions = [
   {
-    question: "Where did we have our first date?",
-    options: ["Park", "Restaurant", "Movies", "Beach"],
-    correctAnswer: "Restaurant",
-    backgroundImage: "/placeholder.svg?height=1080&width=1920",
+    question: "What's your favorite memory of us together and why?",
+    backgroundImage: "/images/quiz-bg-1.jpg",
   },
   {
-    question: "What's my favorite flower?",
-    options: ["Rose", "Tulip", "Sunflower", "Lily"],
-    correctAnswer: "Sunflower",
-    backgroundImage: "/placeholder.svg?height=1080&width=1920",
+    question: "If you could plan our perfect date, what would it look like?",
+    backgroundImage: "/images/quiz-bg-2.jpg",
   },
   {
-    question: "What's our anniversary date?",
-    options: ["Feb 14", "Mar 20", "Jun 15", "Sep 22"],
-    correctAnswer: "Jun 15",
-    backgroundImage: "/placeholder.svg?height=1080&width=1920",
+    question: "What's one thing you'd like us to achieve together in the next year?",
+    backgroundImage: "/images/quiz-bg-3.jpg",
   },
-  // Add more questions here
 ]
 
-export default function ValentinesQuiz() {
+export default function ValentinesExperience() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [score, setScore] = useState(0)
-  const [showHearts, setShowHearts] = useState(false)
-  const [quizCompleted, setQuizCompleted] = useState(false)
+  const [discussionCompleted, setDiscussionCompleted] = useState(false)
+  const [gameConfig, setGameConfig] = useState({
+    canvasWidth: 400,
+    canvasHeight: 600,
+    cupidSize: 50,
+  })
 
-  const handleAnswer = (selectedAnswer: string) => {
-    if (selectedAnswer === questions[currentQuestion].correctAnswer) {
-      setScore(score + 1)
-      setShowHearts(true)
-      setTimeout(() => setShowHearts(false), 2000)
+  useEffect(() => {
+    const updateGameSize = () => {
+      const width = Math.min(400, window.innerWidth - 40)
+      const height = Math.min(600, window.innerHeight - 200)
+      setGameConfig({
+        canvasWidth: width,
+        canvasHeight: height,
+        cupidSize: Math.max(40, Math.floor(width * 0.125)),
+      })
     }
 
-    if (currentQuestion < questions.length - 1) {
-      setTimeout(() => setCurrentQuestion(currentQuestion + 1), 1000)
+    updateGameSize()
+    window.addEventListener("resize", updateGameSize)
+    return () => window.removeEventListener("resize", updateGameSize)
+  }, [])
+
+  const handleNextQuestion = () => {
+    if (currentQuestion < discussionQuestions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1)
     } else {
-      // Quiz is completed
-      setTimeout(() => setQuizCompleted(true), 1000)
+      setDiscussionCompleted(true)
     }
   }
 
   return (
-    <main className={styles.main} style={{ backgroundImage: `url(${questions[currentQuestion].backgroundImage})` }}>
-      {!quizCompleted ? (
-        <div className={styles.quizContainer}>
-          <h1 className={styles.title}>Our Love Quiz</h1>
-          <Question
-            question={questions[currentQuestion].question}
-            options={questions[currentQuestion].options}
-            onAnswer={handleAnswer}
-          />
-          <p className={styles.score}>
-            Score: {score}/{questions.length}
-          </p>
+    <main
+      className={styles.main}
+      style={{
+        backgroundImage: `url(${discussionQuestions[currentQuestion].backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {!discussionCompleted ? (
+        <div className={styles.cardContainer}>
+          <div className={styles.card}>
+            <h2 className={styles.cardTitle}>Question for Discussion</h2>
+            <p className={styles.cardQuestion}>{discussionQuestions[currentQuestion].question}</p>
+            <button onClick={handleNextQuestion} className={styles.nextButton}>
+              {currentQuestion < discussionQuestions.length - 1 ? "Next Question" : "Finish & Play Game"}
+            </button>
+          </div>
         </div>
       ) : (
-        <div className={styles.quizContainer}>
-          <h2 className={styles.title}>Quiz Completed!</h2>
-          <p className={styles.score}>
-            Final Score: {score}/{questions.length}
-          </p>
-          <p className={styles.message}>Now, lets play a game! Help Cupid avoid the hearts.</p>
-          <CupidGame />
+        <div className={styles.gameContainer}>
+          <h2 className={styles.gameTitle}>Let&#39;s Play a Game!</h2>
+          <p className={styles.gameInstructions}>Help Cupid avoid the hearts.</p>
+          <CupidGame config={gameConfig} />
         </div>
       )}
-      {showHearts && <HeartAnimation />}
     </main>
   )
 }

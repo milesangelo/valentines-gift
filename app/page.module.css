@@ -1,41 +1,103 @@
 .main {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-size: cover;
-    background-position: center;
-    transition: background-image 0.5s ease-in-out;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  transition: background-image 0.5s ease-in-out;
+  padding: 1rem;
+}
+
+.cardContainer {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  color: #ff4081;
+  margin-bottom: 1rem;
+}
+
+.cardQuestion {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.nextButton {
+  background-color: #ff4081;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nextButton:hover {
+  background-color: #e91e63;
+}
+
+.gameContainer {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.gameTitle {
+  font-size: 2rem;
+  color: #ff4081;
+  margin-bottom: 1rem;
+}
+
+.gameInstructions {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 1.5rem;
   }
-  
-  .quizContainer {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    max-width: 600px;
-    width: 100%;
+
+  .cardTitle {
+    font-size: 1.3rem;
   }
-  
-  .title {
-    font-size: 2.5rem;
-    color: #ff4081;
-    margin-bottom: 1rem;
+
+  .cardQuestion {
+    font-size: 1rem;
   }
-  
-  .score {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #ff4081;
-    margin-top: 1rem;
+
+  .nextButton {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
   }
-  
-  .message {
-    font-size: 1.2rem;
-    color: #333;
-    margin-bottom: 1rem;
+
+  .gameTitle {
+    font-size: 1.5rem;
   }
-  
-  
+
+  .gameInstructions {
+    font-size: 1rem;
+  }
+}
+

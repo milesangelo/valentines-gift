@@ -8,6 +8,7 @@ interface GameConfig {
   canvasHeight: number
   cupidSize: number
   heartWidth: number
+  heartHeight: number
   heartGap: number
   gravity: number
   jumpStrength: number
@@ -16,13 +17,14 @@ interface GameConfig {
 
 const DEFAULT_CONFIG: GameConfig = {
   canvasWidth: 400,
-  canvasHeight: 700,
-  cupidSize: 30,
+  canvasHeight: 600,
+  cupidSize: 25,
   heartWidth: 40,
+  heartHeight: 40,
   heartGap: 200,
-  gravity: 0.5,
-  jumpStrength: 8,
-  heartSpeed: 2,
+  gravity: 0.3,
+  jumpStrength: 7.2,
+  heartSpeed: 1.5,
 }
 
 interface Heart {
@@ -40,6 +42,7 @@ export default function CupidGame({ config = {} }: CupidGameProps) {
     gameConfig
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const cupidImageRef = useRef<HTMLImageElement | null>(null)
   const [gameOver, setGameOver] = useState(false)
   const [score, setScore] = useState(0)
   const [countdown, setCountdown] = useState(0)
@@ -49,32 +52,19 @@ export default function CupidGame({ config = {} }: CupidGameProps) {
   const animationFrameRef = useRef(0)
   const gameActiveRef = useRef(false)
 
+  useEffect(() => {
+    const img = new Image()
+    img.src = "/images/cupid-cat.png" // Make sure to add this image to your public folder
+    img.onload = () => {
+      cupidImageRef.current = img
+    }
+  }, [])
+
   const jump = useCallback(() => {
     if (gameActiveRef.current) {
       cupidRef.current.velocity = -jumpStrength
     }
   }, [jumpStrength])
-
-  const resetGame = useCallback(() => {
-    cupidRef.current = { y: canvasHeight / 2, velocity: 0 }
-    heartsRef.current = []
-    setGameOver(false)
-    setScore(0)
-    gameActiveRef.current = false
-    setCountdown(3)
-
-    const countdownInterval = setInterval(() => {
-      setCountdown((prevCount) => {
-        if (prevCount > 1) return prevCount - 1
-        clearInterval(countdownInterval)
-        gameActiveRef.current = true
-        if (canvasRef.current) {
-          startGameLoop(canvasRef.current)
-        }
-        return 0
-      })
-    }, 1000)
-  }, [canvasHeight])
 
   const startGameLoop = useCallback(
     (canvas: HTMLCanvasElement) => {
@@ -148,8 +138,9 @@ export default function CupidGame({ config = {} }: CupidGameProps) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
         // Draw cupid
-        ctx.fillStyle = "pink"
-        ctx.fillRect(50, cupidRef.current.y, cupidSize, cupidSize)
+        if (cupidImageRef.current) {
+          ctx.drawImage(cupidImageRef.current, 50, cupidRef.current.y, cupidSize, cupidSize)
+        }
 
         // Draw hearts
         ctx.fillStyle = "red"
@@ -166,6 +157,27 @@ export default function CupidGame({ config = {} }: CupidGameProps) {
     },
     [gravity, heartGap, heartSpeed, heartWidth, cupidSize],
   )
+
+  const resetGame = useCallback(() => {
+    cupidRef.current = { y: canvasHeight / 2, velocity: 0 }
+    heartsRef.current = []
+    setGameOver(false)
+    setScore(0)
+    gameActiveRef.current = false
+    setCountdown(3)
+
+    const countdownInterval = setInterval(() => {
+      setCountdown((prevCount) => {
+        if (prevCount > 1) return prevCount - 1
+        clearInterval(countdownInterval)
+        gameActiveRef.current = true
+        if (canvasRef.current) {
+          startGameLoop(canvasRef.current)
+        }
+        return 0
+      })
+    }, 1000)
+  }, [canvasHeight, startGameLoop])
 
   const isCollision = (rect1: {x: number, y: number, width: number, height: number}, rect2: {x: number, y: number, width: number, height: number}) => {
     return (
