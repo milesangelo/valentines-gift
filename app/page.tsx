@@ -10,7 +10,7 @@ const discussionQuestions = [
     backgroundImage: "/images/quiz-bg-1.jpg",
   },
   {
-    question: "If you could plan our perfect date, what would it look like?",
+    question: "What's something you love about me?",
     backgroundImage: "/images/quiz-bg-2.jpg",
   },
   {
@@ -62,10 +62,10 @@ export default function ValentinesExperience() {
       {!discussionCompleted ? (
         <div className={styles.cardContainer}>
           <div className={styles.card}>
-            <h2 className={styles.cardTitle}>Question for Discussion</h2>
+            <h2 className={styles.cardTitle}>~thought provoking questions for us~</h2>
             <p className={styles.cardQuestion}>{discussionQuestions[currentQuestion].question}</p>
             <button onClick={handleNextQuestion} className={styles.nextButton}>
-              {currentQuestion < discussionQuestions.length - 1 ? "Next Question" : "Finish & Play Game"}
+              {currentQuestion < discussionQuestions.length - 1 ? "next thought" : "ready for a little game?!"}
             </button>
           </div>
         </div>
