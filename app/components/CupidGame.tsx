@@ -8,7 +8,6 @@ interface GameConfig {
   canvasHeight: number
   cupidSize: number
   heartWidth: number
-  heartHeight: number
   heartGap: number
   gravity: number
   jumpStrength: number
@@ -20,7 +19,6 @@ const DEFAULT_CONFIG: GameConfig = {
   canvasHeight: 700,
   cupidSize: 30,
   heartWidth: 40,
-  heartHeight: 40,
   heartGap: 200,
   gravity: 0.5,
   jumpStrength: 8,
@@ -38,7 +36,7 @@ interface CupidGameProps {
 
 export default function CupidGame({ config = {} }: CupidGameProps) {
   const gameConfig: GameConfig = { ...DEFAULT_CONFIG, ...config }
-  const { canvasWidth, canvasHeight, cupidSize, heartWidth, heartHeight, heartGap, gravity, jumpStrength, heartSpeed } =
+  const { canvasWidth, canvasHeight, cupidSize, heartWidth, heartGap, gravity, jumpStrength, heartSpeed } =
     gameConfig
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -169,7 +167,7 @@ export default function CupidGame({ config = {} }: CupidGameProps) {
     [gravity, heartGap, heartSpeed, heartWidth, cupidSize],
   )
 
-  const isCollision = (rect1: any, rect2: any) => {
+  const isCollision = (rect1: {x: number, y: number, width: number, height: number}, rect2: {x: number, y: number, width: number, height: number}) => {
     return (
       rect1.x < rect2.x + rect2.width &&
       rect1.x + rect1.width > rect2.x &&
