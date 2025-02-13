@@ -1,11 +1,15 @@
 .gameContainer {
   position: relative;
+  width: 100%;
+  max-width: 400px;
   margin: 0 auto;
 }
 
 .gameCanvas {
   border: 2px solid #ff4081;
   border-radius: 10px;
+  width: 100%;
+  height: auto;
 }
 
 .gameOver {
@@ -31,94 +35,7 @@
   padding: 10px 20px;
   font-size: 16px;
   border-radius: 5px;
-  cursor: pointer;.gameContainer {
-    position: relative;
-    margin: 0 auto;
-  }
-  
-  .gameCanvas {
-    border: 2px solid #ff4081;
-    border-radius: 10px;
-  }
-  
-  .gameOver {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-  }
-  
-  .gameOver h2 {
-    color: #ff4081;
-    margin-bottom: 10px;
-  }
-  
-  .gameOver button {
-    background-color: #ff4081;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .gameOver button:hover {
-    background-color: #e91e63;
-  }
-  
-  .countdown {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 72px;
-    font-weight: bold;
-    color: #ff4081;
-  }
-  
-  .debugButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-  }
-  
-  .debugButton:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-  }
-  
-  @media (max-width: 600px) {
-    .gameOver {
-      padding: 15px;
-    }
-  
-    .gameOver h2 {
-      font-size: 1.5rem;
-    }
-  
-    .gameOver button {
-      padding: 8px 16px;
-      font-size: 14px;
-    }
-  
-    .countdown {
-      font-size: 48px;
-    }
-  }
-  
-  
+  cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
@@ -134,6 +51,23 @@
   font-size: 72px;
   font-weight: bold;
   color: #ff4081;
+}
+
+.debugButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.debugButton:hover {
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 @media (max-width: 600px) {

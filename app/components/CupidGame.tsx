@@ -21,9 +21,9 @@ const DEFAULT_CONFIG: GameConfig = {
   cupidSize: 50,
   heartWidth: 40,
   heartHeight: 40,
-  heartGap: 300,
-  gravity: 0.42,
-  jumpStrength: 7.9,
+  heartGap: 200,
+  gravity: 0.5,
+  jumpStrength: 8,
   heartSpeed: 2,
 };
 
@@ -37,7 +37,10 @@ interface CupidGameProps {
 }
 
 export default function CupidGame({ config = {} }: CupidGameProps) {
-  const gameConfig: GameConfig = { ...DEFAULT_CONFIG, ...config };
+  const [gameConfig, setGameConfig] = useState<GameConfig>({
+    ...DEFAULT_CONFIG,
+    ...config,
+  });
   const {
     canvasWidth,
     canvasHeight,
@@ -55,6 +58,7 @@ export default function CupidGame({ config = {} }: CupidGameProps) {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [countdown, setCountdown] = useState(0);
+  const [debugMode, setDebugMode] = useState(false);
 
   const cupidRef = useRef({ y: canvasHeight / 2, velocity: 0 });
   const heartsRef = useRef<Heart[]>([]);
@@ -202,16 +206,16 @@ export default function CupidGame({ config = {} }: CupidGameProps) {
           );
         });
 
-        // if (debugMode) {
-        //   // Draw cupid hitbox
-        //   ctx.strokeStyle = "rgba(0, 255, 0, 0.5)";
-        //   ctx.strokeRect(
-        //     cupidHitbox.x,
-        //     cupidHitbox.y,
-        //     cupidHitbox.width,
-        //     cupidHitbox.height
-        //   );
-        // }
+        if (debugMode) {
+          // Draw cupid hitbox
+          ctx.strokeStyle = "rgba(0, 255, 0, 0.5)";
+          ctx.strokeRect(
+            cupidHitbox.x,
+            cupidHitbox.y,
+            cupidHitbox.width,
+            cupidHitbox.height
+          );
+        }
 
         // Continue game loop
         animationFrameRef.current = requestAnimationFrame(gameLoop);
@@ -219,7 +223,15 @@ export default function CupidGame({ config = {} }: CupidGameProps) {
 
       gameLoop();
     },
-    [gravity, heartGap, heartSpeed, heartWidth, heartHeight, cupidSize]
+    [
+      gravity,
+      heartGap,
+      heartSpeed,
+      heartWidth,
+      heartHeight,
+      cupidSize,
+      debugMode,
+    ]
   );
 
   const isCollision = (
@@ -254,12 +266,34 @@ export default function CupidGame({ config = {} }: CupidGameProps) {
     ctx.fill();
     ctx.restore();
 
-    // if (debugMode) {
-    //   // Draw hitbox (for debugging)
-    //   ctx.strokeStyle = "rgba(128, 128, 128, 0.5)";
-    //   ctx.strokeRect(x + width * 0.1, y, width * 0.8, height);
-    // }
+    if (debugMode) {
+      // Draw hitbox (for debugging)
+      ctx.strokeStyle = "rgba(255, 255, 0, 0.5)";
+      ctx.strokeRect(x + width * 0.1, y, width * 0.8, height);
+    }
   };
+
+  useEffect(() => {
+    const updateCanvasSize = () => {
+      if (canvasRef.current) {
+        const containerWidth =
+          canvasRef.current.parentElement?.clientWidth || canvasWidth;
+        const containerHeight = Math.min(600, window.innerHeight - 200);
+        canvasRef.current.width = containerWidth;
+        canvasRef.current.height = containerHeight;
+        setGameConfig((prev) => ({
+          ...prev,
+          canvasWidth: containerWidth,
+          canvasHeight: containerHeight,
+          cupidSize: Math.max(40, Math.floor(containerWidth * 0.125)),
+        }));
+      }
+    };
+
+    updateCanvasSize();
+    window.addEventListener("resize", updateCanvasSize);
+    return () => window.removeEventListener("resize", updateCanvasSize);
+  }, [canvasWidth]);
 
   useEffect(() => {
     resetGame();
@@ -271,17 +305,8 @@ export default function CupidGame({ config = {} }: CupidGameProps) {
   }, [resetGame]);
 
   return (
-    <div
-      className={styles.gameContainer}
-      style={{ width: canvasWidth, height: canvasHeight }}
-    >
-      <canvas
-        ref={canvasRef}
-        width={canvasWidth}
-        height={canvasHeight}
-        onClick={jump}
-        className={styles.gameCanvas}
-      />
+    <div className={styles.gameContainer}>
+      <canvas ref={canvasRef} onClick={jump} className={styles.gameCanvas} />
       {countdown > 0 && <div className={styles.countdown}>{countdown}</div>}
       {gameOver && (
         <div className={styles.gameOver}>
@@ -290,6 +315,12 @@ export default function CupidGame({ config = {} }: CupidGameProps) {
           <button onClick={resetGame}>Play Again</button>
         </div>
       )}
+      <button
+        onClick={() => setDebugMode(!debugMode)}
+        className={styles.debugButton}
+      >
+        {debugMode ? "Disable" : "Enable"} Debug
+      </button>
     </div>
   );
 }
